@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect ,useRef, useInsertionEffect} from 'react'
 
 
 
@@ -11,7 +11,7 @@ function App() {
   
 
   const passwordGenerator = useCallback(() => {
-    let pass = ""  
+    let pass = "" 
 
     let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
@@ -24,7 +24,7 @@ function App() {
     for (let i = 0; i <= length; i++) {
       let char = Math.floor(Math.random() * str.length + 1) 
 
-      pass += str.charAt(char)
+      pass += str.charAt(char) 
 
     }
     setpassword(pass)
@@ -33,7 +33,7 @@ function App() {
   }, [length, numberAllowed, characterAllowed, setpassword] 
   )
 
-   
+  
 
   useEffect(() => {
     passwordGenerator()
@@ -96,7 +96,7 @@ function App() {
               defaultChecked={characterAllowed} 
               id="characterInput"
               onChange={() => {
-                setcharacterAllowed((prev) => !prev); 
+                setcharacterAllowed((prev) => !prev);
               }} />
 
             <label htmlFor='characterInput'>Characters</label>
