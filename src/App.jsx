@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 
-import './App.css'
+
 
 function App() {
   const [length, setlength] = useState(8)
@@ -8,12 +8,10 @@ function App() {
   const [characterAllowed, setcharacterAllowed] = useState(false)
   const [password, setpassword] = useState("")
 
-  // useCallback is a React Hook that lets you cache a function definition between re-renders,
-  // useCallback(function jisko baar baar execute hona hai,[dependencies jisko use krne par function fir se execute hoye])
-  //yha par dependencies wo hai jinke basis par function executes and PASSWORD change hoga
+  
 
   const passwordGenerator = useCallback(() => {
-    let pass = ""  //phle to empty hai , fir jo pass generate hoga usko hum Line9 se setpassword se password me bhj denge
+    let pass = ""  
 
     let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
@@ -23,19 +21,89 @@ function App() {
     if (characterAllowed) {
       str += "!@#$%^&*(){}[]_-=`~"
     }
-    for (let i = 0; i < array.length; i++) {
-      let char = Math.floor(Math.random() * str.length + 1) //Random Number Generator
+    for (let i = 0; i <= length; i++) {
+      let char = Math.floor(Math.random() * str.length + 1) 
 
-      pass = str.charAt(char) //jo random nuumber hai uski ke similar ASCII se str me alphabet choose kr rhe
+      pass += str.charAt(char)
 
     }
+    setpassword(pass)
 
 
-  }, [length, numberAllowed, characterAllowed, setpassword])
+  }, [length, numberAllowed, characterAllowed, setpassword] 
+  )
+
+   
+
+  useEffect(() => {
+    passwordGenerator()
+  }, [length, numberAllowed, characterAllowed, passwordGenerator])
+
 
   return (
     <>
-      <h1 className='text-6xl text-center text-white'>Password Generator</h1>
+      <div className='w-full max-w-md mx-auto shadow-md rounded-lg px-4 py-3 my-8 text-[#8c4843] bg-[#c59849]'>
+
+        <h1 className='text-[#221e22] text-center my-3 text-3xl'>Password Generator</h1>
+
+        <div className='flex shadow rounded-lg overflow-hidden mb-1'>
+          <input
+            type="text"
+            value={password}
+            className='outline-none w-full py-1 px-3'
+            placeholder='password'
+            readOnly
+          />
+
+          <button
+            className='outline-none bg-blue-700 text-white px-3 py-0.5 shrink-0'
+          >copy</button>
+
+        </div>
+
+
+        <div className='flex text-sm gap-x-2'>
+          <div className='flex items-center gap-x-1'>
+            <input
+              type="range"
+              min={6}
+              max={22}
+              value={length}
+              className='cursor-pointer'
+              onChange={(e) => { setlength(e.target.value) }} />
+            
+
+            <label >Length:{length}</label>
+          </div>
+
+          <div className='flex items-center gap-x-1'>
+            <input
+              type="checkbox"
+              defaultChecked={numberAllowed}
+              id="numberInput"
+              onChange={() => {
+                setnumberAllowed((prev) => !prev); 
+              }} />
+
+            <label htmlFor='numberInput'>Numbers</label>
+
+          </div>
+
+
+          <div className='flex items-center gap-x-1'>
+            <input
+              type="checkbox"
+              defaultChecked={characterAllowed} 
+              id="characterInput"
+              onChange={() => {
+                setcharacterAllowed((prev) => !prev); 
+              }} />
+
+            <label htmlFor='characterInput'>Characters</label>
+
+          </div>
+        </div>
+      </div>
     </>
   )
 }
